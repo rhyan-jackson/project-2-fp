@@ -1,8 +1,7 @@
 import requests
 from apikey import api_key
 import os
-
-#matheus é lindo
+import json
 
 def menu():
     print(
@@ -28,14 +27,14 @@ def menu():
 
     while True:
         try:
-            escolha = int(input("\nInsert your option > "))
+            op = int(input("\nInsert your option > "))
         except Exception:
             print("Insert an valid option.")
         else:
-            if not 1 <= escolha or not escolha <= 2:
+            if not 1 <= op or not op <= 2:
                 print("Insert an valid option.")
             else:
-                return escolha
+                return op
 
 
 def clear_terminal():
@@ -119,8 +118,8 @@ def main():
     database = fileToDict("categories2.txt")
 
     # Selected categories after user choose.
-    menuop = menu()
-    if menuop == 1:
+    menu_op = menu()
+    if menu_op == 1:
         selected = getCategories(database)
     else:
         exit()

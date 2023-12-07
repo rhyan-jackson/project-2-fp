@@ -1,0 +1,10 @@
+commercial.outdoor_and_sport.bicycle
+commercial.outdoor_and_sport.fishing
+commercial.outdoor_and_sport.golf
+commercial.vehicle
+commercial.hobby
+commercial.hobby.model
+commercial.hobby.anime
+commercial.hobby.collecting
+commercial.hobby.games
+commercial.hobby.brewing

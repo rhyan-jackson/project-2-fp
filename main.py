@@ -1,8 +1,9 @@
 import requests
 from apikey import api_key
 import os
-import json
 from math import radians, cos, sin, acos
+import re
+from datetime import datetime
 
 
 def menu():
@@ -22,7 +23,8 @@ def menu():
     print(
         """
 ---------< Choose an option >---------
- > [1] Start category selection
+ > [1] Request locals based in given coord's and area.
+ > [2] Start travelling plan
         
         """
     )
@@ -143,7 +145,12 @@ def getCategories(categories_database):
 
 
 def distanceByCoords(lat1, lat2, lng1, lng2):
-    lat1Rad, lat2Rad, lng1Rad, lng2Rad = radians(lat1), radians(float(lat2)), radians(lng1), radians(float(lng2))
+    lat1Rad, lat2Rad, lng1Rad, lng2Rad = (
+        radians(lat1),
+        radians(float(lat2)),
+        radians(lng1),
+        radians(float(lng2)),
+    )
     rTerra = 6371
 
     return (
@@ -187,16 +194,33 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
 
             places_organized_list.append(info_dict)
 
-    for item in places_organized_list:
-        print("Name:", item["name"])
-        print("Country:", item["country"])
-        print("City:", item["city"])
-        print("Latitude and Longitude:", item["lat_long"])
-        print("District:", item["district"])
-        print("Distance:", "{:.2f}".format(item["distance"]), "Km")
-        print("Adress:", item["formatted"])
-        print("Categories:", item["categories"])
-        print("----")
+    organized_sorted_by_distance = sorted(
+        places_organized_list, key=lambda d: d["distance"]
+    )
+
+    # for item in organized_sorted_by_distance:
+    #     print("Name:", item["name"])
+    #     print("Country:", item["country"])
+    #     print("City:", item["city"])
+    #     print("Latitude and Longitude:", item["lat_long"])
+    #     print("District:", item["district"])
+    #     print("Distance:", "{:.2f}".format(item["distance"]), "Km")
+    #     print("Adress:", item["formatted"])
+    #     print("Categories:", item["categories"])
+    #     print("----")
+    return organized_sorted_by_distance
+
+
+def validLatAndLon(input_text):
+    pattern = re.compile(r"^[-]?\d{1,2}(?:\.\d+)?$", re.IGNORECASE)
+    return bool(pattern.match(input_text))
+
+
+def requestTimeZone(lat, long):
+    url = f"https://timeapi.io/api/Time/current/coordinate?latitude={lat}&longitude={long}"
+    response = requests.get(url)
+    d = response.json()
+    return [d["timeZone"], d["time"], d["dateTime"]]
 
 
 def main():
@@ -204,25 +228,84 @@ def main():
 
     # Selected categories after user choose.
     menu_op = menu()
-    if menu_op == 1:
-        selected = getCategories(database)
-    else:
-        exit()
 
     # Requesting the information input's.
-    # local_coords_lat = input("Insert your latitude > ")
-    # local_coords_lon = input("Insert your longitude > ")
-    # how_far_meters = float(input("Insert how far you want to go (km) > ")) * 1000
+    while True:
+        local_coords_lat = input("Insert your latitude > ")
+        if validLatAndLon(local_coords_lat):
+            break
+        else:
+            print("Insert an valid latitude.")
+
+    while True:
+        local_coords_lon = input("Insert your longitude > ")
+        if validLatAndLon(local_coords_lon):
+            break
+        else:
+            print("Insert an valid longitude.")
+
+    while True:
+        how_far_meters_inp = input("Insert how far you want to go (km) > ")
+        try:
+            how_far_meters = float(how_far_meters_inp) * 1000
+        except ValueError:
+            pass
+        else:
+            if how_far_meters > 0:
+                break
+        finally:
+            print("Insert an valid number")
+            
+    # local_coords_lat = '38.9'
+    # local_coords_lon = '77.03'
+            
+            
+
+    if menu_op == 1:
+        selected = getCategories(database)
+
+        # Treating data to make the request in API
+        url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
+
+        response = requests.get(url)
+        organized_response_dict = catchJsonInfos(
+            response.json(), local_coords_lat, local_coords_lon
+        )
+
+        # Fazer função para printar organized_response_dict (Matheus).
+
+    elif menu_op == 2:
+        clear_terminal()
+        print("You've choosen the travel plan. Here are the specific info's: ")
+        destiny_info = requestTimeZone(local_coords_lat, local_coords_lon)
+        datetime_obj_destiny = datetime.strptime(
+            destiny_info[2][:18], "%Y-%m-%dT%H:%M:%S"
+        )
+        actual_datetime = datetime.now()
+        print(
+            f"Your local time > {actual_datetime.strftime('%H:%M:%S')} | {datetime_obj_destiny.strftime('%H:%M:%S')} < Your destiny time\n"
+        )
+        difference = abs(round((datetime.now() - datetime_obj_destiny).total_seconds() / 3600))
+        print(f"This is a difference of {difference} hours.")
+        print(f"The destiny TimeZone is {destiny_info[0]}.")
+
+        # Fazer parte da unidade monetária (outra API)
+
+        # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
+
+        # url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
+
+        # response = requests.get(url)
+        # organized_response_dict = catchJsonInfos(
+        # response.json(), local_coords_lat, local_coords_lon
+    # )
+
+    else:
+        exit()
 
     local_coords_lat = "40.730610"
     local_coords_lon = "-73.935242"
     how_far_meters = 20 * 1000
-
-    # Treating data to make the request in API
-    url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
-
-    response = requests.get(url)
-    catchJsonInfos(response.json(), local_coords_lat, local_coords_lon)
 
 
 if __name__ == "__main__":

@@ -198,18 +198,21 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
         places_organized_list, key=lambda d: d["distance"]
     )
 
-    # for item in organized_sorted_by_distance:
-    #     print("Name:", item["name"])
-    #     print("Country:", item["country"])
-    #     print("City:", item["city"])
-    #     print("Latitude and Longitude:", item["lat_long"])
-    #     print("District:", item["district"])
-    #     print("Distance:", "{:.2f}".format(item["distance"]), "Km")
-    #     print("Adress:", item["formatted"])
-    #     print("Categories:", item["categories"])
-    #     print("----")
     return organized_sorted_by_distance
 
+def printInfos(organized_sorted_by_distance):
+     for item in organized_sorted_by_distance:
+         print("\n")
+         print("-"*20)
+         print("Name:", item["name"])
+         print("Country:", item["country"])
+         print("City:", item["city"])
+         print("Latitude and Longitude:", item["lat_long"])
+         print("District:", item["district"])
+         print("Distance:", "{:.2f}".format(item["distance"]), "Km")
+         print("Adress:", item["formatted"])
+         print("Categories:", item["categories"])
+         print("-"*20)
 
 def validLatAndLon(input_text):
     pattern = re.compile(r"^[-]?\d{1,2}(?:\.\d+)?$", re.IGNORECASE)
@@ -222,6 +225,11 @@ def requestTimeZone(lat, long):
     d = response.json()
     return [d["timeZone"], d["time"], d["dateTime"]]
 
+def requestCurrency(country):
+    url = f"https://ipapi.co/currency"
+    response = requests.get(url)
+    d = response.json()
+    return d
 
 def main():
     database = fileToDict("categories2.txt")
@@ -271,8 +279,9 @@ def main():
         organized_response_dict = catchJsonInfos(
             response.json(), local_coords_lat, local_coords_lon
         )
+        
+        printInfos(organized_response_dict)
 
-        # Fazer função para printar organized_response_dict (Matheus).
 
     elif menu_op == 2:
         clear_terminal()
@@ -289,7 +298,9 @@ def main():
         print(f"This is a difference of {difference} hours.")
         print(f"The destiny TimeZone is {destiny_info[0]}.")
 
-        # Fazer parte da unidade monetária (outra API)
+        # Requesting the country for currency conversion
+        currency_info = requestCurrency(local_coords_lat, local_coords_lon)
+        print(f"Your destiny currency is {currency_info}.")
 
         # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
 

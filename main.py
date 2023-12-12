@@ -232,7 +232,7 @@ def requestCurrency(country):
     return d
 
 def main():
-    database = fileToDict("categories2.txt")
+    database = fileToDict("categories.txt")
 
     # Selected categories after user choose.
     menu_op = menu()
@@ -299,8 +299,8 @@ def main():
         print(f"The destiny TimeZone is {destiny_info[0]}.")
 
         # Requesting the country for currency conversion
-        currency_info = requestCurrency(local_coords_lat, local_coords_lon)
-        print(f"Your destiny currency is {currency_info}.")
+        #currency_info = requestCurrency(local_coords_lat, local_coords_lon)
+        #print(f"Your destiny currency is {currency_info}.")
 
         # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
 
@@ -314,9 +314,9 @@ def main():
     else:
         exit()
 
-    local_coords_lat = "40.730610"
-    local_coords_lon = "-73.935242"
-    how_far_meters = 20 * 1000
+    #local_coords_lat = "40.730610"
+    #local_coords_lon = "-73.935242"
+    #how_far_meters = 20 * 1000
 
 
 if __name__ == "__main__":

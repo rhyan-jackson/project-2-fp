@@ -226,20 +226,16 @@ def printInfos(organized_sorted_by_distance):
         print("Categories:", item["categories"])
         print("-" * 20)
 
-
 def validLat(input_text):
-    pattern = re.compile(
-        r"/^(\-?[0-8]?\d(?:\.\d{1,6})?|\-?90(?:\.0{1,6})?)$/", re.IGNORECASE
-    )
+    pattern = re.compile(r"^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$", re.IGNORECASE)
     return bool(pattern.match(input_text))
 
 
 def validLon(input_text):
     pattern = re.compile(
-        r"/^(\-?\d{1,2}(?:\.\d{1,6})?|\-?180(?:\.0{1,6})?)$/", re.IGNORECASE
+        r"^-?((\d{1,2}(\.\d+)?)|1[0-7]\d(\.\d+)?|180(\.0+)?)$", re.IGNORECASE
     )
     return bool(pattern.match(input_text))
-
 
 def requestTimeZone(lat, long):
     url = f"https://timeapi.io/api/Time/current/coordinate?latitude={lat}&longitude={long}"

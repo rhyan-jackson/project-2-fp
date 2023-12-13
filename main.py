@@ -225,11 +225,16 @@ def requestTimeZone(lat, long):
     d = response.json()
     return [d["timeZone"], d["time"], d["dateTime"]]
 
-def requestCurrency(country):
-    url = f"https://ipapi.co/currency"
+def requestCurrency(capital):
+    url = f"https://restcountries.com/v3.1/capital/{capital}"
     response = requests.get(url)
     d = response.json()
-    return d
+    try:
+        currency = list(d[0]["currencies"].keys())[0]
+    except Exception:
+        currency = None
+    finally:
+        return currency
 
 def main():
     database = fileToDict("categories.txt")
@@ -299,8 +304,11 @@ def main():
         print(f"The destiny TimeZone is {destiny_info[0]}.")
 
         # Requesting the country for currency conversion
-        #currency_info = requestCurrency(local_coords_lat, local_coords_lon)
-        #print(f"Your destiny currency is {currency_info}.")
+        capital = destiny_info[0].split("/")[1]
+        currency_info = requestCurrency(capital)
+        if currency_info is not None:
+    
+            print(f"Your destiny currency is {currency_info}.")
 
         # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
 
@@ -322,3 +330,4 @@ def main():
 if __name__ == "__main__":
     clear_terminal()
     main()
+

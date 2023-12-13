@@ -215,7 +215,7 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
 def printInfos(organized_sorted_by_distance):
     for item in organized_sorted_by_distance:
         print("\n")
-        print("-" * 20)
+        print("-" * 50)
         print("Name:", item["name"])
         print("Country:", item["country"])
         print("City:", item["city"])
@@ -224,7 +224,7 @@ def printInfos(organized_sorted_by_distance):
         print("Distance:", "{:.2f}".format(item["distance"]), "Km")
         print("Adress:", item["formatted"])
         print("Categories:", item["categories"])
-        print("-" * 20)
+        print("-" * 50)
 
 def validLat(input_text):
     pattern = re.compile(r"^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$", re.IGNORECASE)

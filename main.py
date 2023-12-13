@@ -1,28 +1,41 @@
 import requests
 from apikey import api_key
 import os
-import json
 from math import radians, cos, sin, acos
+import re
+from datetime import datetime
 
 
 def menu():
+    #     print(
+    #         """
+    # ██╗░░░██╗░█████╗░░█████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗  ███████╗░██████╗░█████╗░░█████╗░██████╗░███████╗
+    # ██║░░░██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║  ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
+    # ╚██╗░██╔╝███████║██║░░╚═╝███████║░░░██║░░░██║██║░░██║██╔██╗██║  █████╗░░╚█████╗░██║░░╚═╝███████║██████╔╝█████╗░░
+    # ░╚████╔╝░██╔══██║██║░░██╗██╔══██║░░░██║░░░██║██║░░██║██║╚████║  ██╔══╝░░░╚═══██╗██║░░██╗██╔══██║██╔═══╝░██╔══╝░░
+    # ░░╚██╔╝░░██║░░██║╚█████╔╝██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║  ███████╗██████╔╝╚█████╔╝██║░░██║██║░░░░░███████╗
+    # ░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝  ╚══════╝╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░░░░╚══════╝
+    #           """
+    #     )
     print(
         """
-██╗░░░██╗░█████╗░░█████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗  ███████╗░██████╗░█████╗░░█████╗░██████╗░███████╗
-██║░░░██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║  ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
-╚██╗░██╔╝███████║██║░░╚═╝███████║░░░██║░░░██║██║░░██║██╔██╗██║  █████╗░░╚█████╗░██║░░╚═╝███████║██████╔╝█████╗░░
-░╚████╔╝░██╔══██║██║░░██╗██╔══██║░░░██║░░░██║██║░░██║██║╚████║  ██╔══╝░░░╚═══██╗██║░░██╗██╔══██║██╔═══╝░██╔══╝░░
-░░╚██╔╝░░██║░░██║╚█████╔╝██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║  ███████╗██████╔╝╚█████╔╝██║░░██║██║░░░░░███████╗
-░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝  ╚══════╝╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░░░░╚══════╝
-          """
+    ███        ▄████████    ▄████████  ▄█    █▄     ▄████████  ▄█               ▄███████▄  ▄█          ▄████████ ███▄▄▄▄   ███▄▄▄▄      ▄████████    ▄████████ 
+▀█████████▄   ███    ███   ███    ███ ███    ███   ███    ███ ███              ███    ███ ███         ███    ███ ███▀▀▀██▄ ███▀▀▀██▄   ███    ███   ███    ███ 
+   ▀███▀▀██   ███    ███   ███    ███ ███    ███   ███    █▀  ███              ███    ███ ███         ███    ███ ███   ███ ███   ███   ███    █▀    ███    ███ 
+    ███   ▀  ▄███▄▄▄▄██▀   ███    ███ ███    ███  ▄███▄▄▄     ███              ███    ███ ███         ███    ███ ███   ███ ███   ███  ▄███▄▄▄      ▄███▄▄▄▄██▀ 
+    ███     ▀▀███▀▀▀▀▀   ▀███████████ ███    ███ ▀▀███▀▀▀     ███            ▀█████████▀  ███       ▀███████████ ███   ███ ███   ███ ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   
+    ███     ▀███████████   ███    ███ ███    ███   ███    █▄  ███              ███        ███         ███    ███ ███   ███ ███   ███   ███    █▄  ▀███████████ 
+    ███       ███    ███   ███    ███ ███    ███   ███    ███ ███▌    ▄        ███        ███▌    ▄   ███    ███ ███   ███ ███   ███   ███    ███   ███    ███ 
+   ▄████▀     ███    ███   ███    █▀   ▀██████▀    ██████████ █████▄▄██       ▄████▀      █████▄▄██   ███    █▀   ▀█   █▀   ▀█   █▀    ██████████   ███    ███ 
+              ███    ███                                      ▀                           ▀                                                         ███    ███ 
+        """
     )
-
-    print("Press any key to continue".center(112))
-    input()
+    input("Press ENTER to continue".center(160))
     print(
         """
----------< Choose an option >---------
- > [1] Start category selection
+           Choose an option
+ ( 1 ) Request locals based in given coord's and area.
+ ( 2 ) Start travelling plan
         
         """
     )
@@ -123,9 +136,9 @@ def getCategories(categories_database):
         print(f'Already selected > {", ".join(categories_selected)}')
         print(
             """
----------< Do you want to continue selecting? >---------
- > [1] Yes
- > [Any other option] No
+           Do you want to continue selecting?
+ ( 1 ) Yes
+ (Enter) No
                 
                 """
         )
@@ -143,7 +156,12 @@ def getCategories(categories_database):
 
 
 def distanceByCoords(lat1, lat2, lng1, lng2):
-    lat1Rad, lat2Rad, lng1Rad, lng2Rad = radians(lat1), radians(float(lat2)), radians(lng1), radians(float(lng2))
+    lat1Rad, lat2Rad, lng1Rad, lng2Rad = (
+        radians(lat1),
+        radians(float(lat2)),
+        radians(lng1),
+        radians(float(lng2)),
+    )
     rTerra = 6371
 
     return (
@@ -187,7 +205,17 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
 
             places_organized_list.append(info_dict)
 
-    for item in places_organized_list:
+    organized_sorted_by_distance = sorted(
+        places_organized_list, key=lambda d: d["distance"]
+    )
+
+    return organized_sorted_by_distance
+
+
+def printInfos(organized_sorted_by_distance):
+    for item in organized_sorted_by_distance:
+        print("\n")
+        print("-" * 50)
         print("Name:", item["name"])
         print("Country:", item["country"])
         print("City:", item["city"])
@@ -196,33 +224,124 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
         print("Distance:", "{:.2f}".format(item["distance"]), "Km")
         print("Adress:", item["formatted"])
         print("Categories:", item["categories"])
-        print("----")
+        print("-" * 50)
+
+def validLat(input_text):
+    pattern = re.compile(r"^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$", re.IGNORECASE)
+    return bool(pattern.match(input_text))
+
+
+def validLon(input_text):
+    pattern = re.compile(
+        r"^-?((\d{1,2}(\.\d+)?)|1[0-7]\d(\.\d+)?|180(\.0+)?)$", re.IGNORECASE
+    )
+    return bool(pattern.match(input_text))
+
+def requestTimeZone(lat, long):
+    url = f"https://timeapi.io/api/Time/current/coordinate?latitude={lat}&longitude={long}"
+    response = requests.get(url)
+    d = response.json()
+    return [d["timeZone"], d["time"], d["dateTime"]]
+
+
+def requestCurrency(capital):
+    url = f"https://restcountries.com/v3.1/capital/{capital}"
+    response = requests.get(url)
+    d = response.json()
+    try:
+        currency = list(d[0]["currencies"].keys())[0]
+    except Exception:
+        currency = None
+    finally:
+        return currency
 
 
 def main():
-    database = fileToDict("categories2.txt")
+    database = fileToDict("categories.txt")
 
     # Selected categories after user choose.
     menu_op = menu()
+
+    # Requesting the information input's.
+    while True:
+        local_coords_lat = input("Insert your latitude > ")
+        if validLat(local_coords_lat):
+            break
+        else:
+            print("Insert an valid latitude.")
+
+    while True:
+        local_coords_lon = input("Insert your longitude > ")
+        if validLon(local_coords_lon):
+            break
+        else:
+            print("Insert an valid longitude.")
+
+    while True:
+        how_far_meters_inp = input("Insert how far you want to go (km) > ")
+        try:
+            how_far_meters = float(how_far_meters_inp) * 1000
+        except ValueError:
+            pass
+        else:
+            if how_far_meters > 0:
+                break
+        finally:
+            print("Insert an valid number")
+
+    # local_coords_lat = '38.9'
+    # local_coords_lon = '77.03'
+
     if menu_op == 1:
         selected = getCategories(database)
+
+        # Treating data to make the request in API
+        url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
+
+        response = requests.get(url)
+        organized_response_dict = catchJsonInfos(
+            response.json(), local_coords_lat, local_coords_lon
+        )
+
+        printInfos(organized_response_dict)
+
+    elif menu_op == 2:
+        clear_terminal()
+        print("You've choosen the travel plan. Here are the specific info's: ")
+        destiny_info = requestTimeZone(local_coords_lat, local_coords_lon)
+        datetime_obj_destiny = datetime.strptime(
+            destiny_info[2][:18], "%Y-%m-%dT%H:%M:%S"
+        )
+        actual_datetime = datetime.now()
+        print(
+            f"Your local time > {actual_datetime.strftime('%H:%M:%S')} | {datetime_obj_destiny.strftime('%H:%M:%S')} < Your destiny time\n"
+        )
+        difference = abs(
+            round((datetime.now() - datetime_obj_destiny).total_seconds() / 3600)
+        )
+        print(f"This is a difference of {difference} hours.")
+        print(f"The destiny TimeZone is {destiny_info[0]}.")
+
+        # Requesting the country for currency conversion
+        capital = destiny_info[0].split("/")[1]
+        currency_info = requestCurrency(capital)
+        if currency_info is not None:
+            print(f"Your destiny currency is {currency_info}.")
+        # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
+
+        # url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
+
+        # response = requests.get(url)
+        # organized_response_dict = catchJsonInfos(
+        # response.json(), local_coords_lat, local_coords_lon
+    # )
+
     else:
         exit()
 
-    # Requesting the information input's.
-    # local_coords_lat = input("Insert your latitude > ")
-    # local_coords_lon = input("Insert your longitude > ")
-    # how_far_meters = float(input("Insert how far you want to go (km) > ")) * 1000
-
-    local_coords_lat = "40.730610"
-    local_coords_lon = "-73.935242"
-    how_far_meters = 20 * 1000
-
-    # Treating data to make the request in API
-    url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
-
-    response = requests.get(url)
-    catchJsonInfos(response.json(), local_coords_lat, local_coords_lon)
+    # local_coords_lat = "40.730610"
+    # local_coords_lon = "-73.935242"
+    # how_far_meters = 20 * 1000
 
 
 if __name__ == "__main__":

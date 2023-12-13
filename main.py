@@ -7,24 +7,35 @@ from datetime import datetime
 
 
 def menu():
+    #     print(
+    #         """
+    # ██╗░░░██╗░█████╗░░█████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗  ███████╗░██████╗░█████╗░░█████╗░██████╗░███████╗
+    # ██║░░░██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║  ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
+    # ╚██╗░██╔╝███████║██║░░╚═╝███████║░░░██║░░░██║██║░░██║██╔██╗██║  █████╗░░╚█████╗░██║░░╚═╝███████║██████╔╝█████╗░░
+    # ░╚████╔╝░██╔══██║██║░░██╗██╔══██║░░░██║░░░██║██║░░██║██║╚████║  ██╔══╝░░░╚═══██╗██║░░██╗██╔══██║██╔═══╝░██╔══╝░░
+    # ░░╚██╔╝░░██║░░██║╚█████╔╝██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║  ███████╗██████╔╝╚█████╔╝██║░░██║██║░░░░░███████╗
+    # ░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝  ╚══════╝╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░░░░╚══════╝
+    #           """
+    #     )
     print(
         """
-██╗░░░██╗░█████╗░░█████╗░░█████╗░████████╗██╗░█████╗░███╗░░██╗  ███████╗░██████╗░█████╗░░█████╗░██████╗░███████╗
-██║░░░██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║  ██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
-╚██╗░██╔╝███████║██║░░╚═╝███████║░░░██║░░░██║██║░░██║██╔██╗██║  █████╗░░╚█████╗░██║░░╚═╝███████║██████╔╝█████╗░░
-░╚████╔╝░██╔══██║██║░░██╗██╔══██║░░░██║░░░██║██║░░██║██║╚████║  ██╔══╝░░░╚═══██╗██║░░██╗██╔══██║██╔═══╝░██╔══╝░░
-░░╚██╔╝░░██║░░██║╚█████╔╝██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║  ███████╗██████╔╝╚█████╔╝██║░░██║██║░░░░░███████╗
-░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝  ╚══════╝╚═════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░░░░╚══════╝
-          """
+    ███        ▄████████    ▄████████  ▄█    █▄     ▄████████  ▄█               ▄███████▄  ▄█          ▄████████ ███▄▄▄▄   ███▄▄▄▄      ▄████████    ▄████████ 
+▀█████████▄   ███    ███   ███    ███ ███    ███   ███    ███ ███              ███    ███ ███         ███    ███ ███▀▀▀██▄ ███▀▀▀██▄   ███    ███   ███    ███ 
+   ▀███▀▀██   ███    ███   ███    ███ ███    ███   ███    █▀  ███              ███    ███ ███         ███    ███ ███   ███ ███   ███   ███    █▀    ███    ███ 
+    ███   ▀  ▄███▄▄▄▄██▀   ███    ███ ███    ███  ▄███▄▄▄     ███              ███    ███ ███         ███    ███ ███   ███ ███   ███  ▄███▄▄▄      ▄███▄▄▄▄██▀ 
+    ███     ▀▀███▀▀▀▀▀   ▀███████████ ███    ███ ▀▀███▀▀▀     ███            ▀█████████▀  ███       ▀███████████ ███   ███ ███   ███ ▀▀███▀▀▀     ▀▀███▀▀▀▀▀   
+    ███     ▀███████████   ███    ███ ███    ███   ███    █▄  ███              ███        ███         ███    ███ ███   ███ ███   ███   ███    █▄  ▀███████████ 
+    ███       ███    ███   ███    ███ ███    ███   ███    ███ ███▌    ▄        ███        ███▌    ▄   ███    ███ ███   ███ ███   ███   ███    ███   ███    ███ 
+   ▄████▀     ███    ███   ███    █▀   ▀██████▀    ██████████ █████▄▄██       ▄████▀      █████▄▄██   ███    █▀   ▀█   █▀   ▀█   █▀    ██████████   ███    ███ 
+              ███    ███                                      ▀                           ▀                                                         ███    ███ 
+        """
     )
-
-    print("Press any key to continue".center(112))
-    input()
+    input("Press ENTER to continue".center(160))
     print(
         """
----------< Choose an option >---------
- > [1] Request locals based in given coord's and area.
- > [2] Start travelling plan
+           Choose an option
+ ( 1 ) Request locals based in given coord's and area.
+ ( 2 ) Start travelling plan
         
         """
     )
@@ -125,9 +136,9 @@ def getCategories(categories_database):
         print(f'Already selected > {", ".join(categories_selected)}')
         print(
             """
----------< Do you want to continue selecting? >---------
- > [1] Yes
- > [Any other option] No
+           Do you want to continue selecting?
+ ( 1 ) Yes
+ (Enter) No
                 
                 """
         )
@@ -200,22 +211,33 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
 
     return organized_sorted_by_distance
 
-def printInfos(organized_sorted_by_distance):
-     for item in organized_sorted_by_distance:
-         print("\n")
-         print("-"*20)
-         print("Name:", item["name"])
-         print("Country:", item["country"])
-         print("City:", item["city"])
-         print("Latitude and Longitude:", item["lat_long"])
-         print("District:", item["district"])
-         print("Distance:", "{:.2f}".format(item["distance"]), "Km")
-         print("Adress:", item["formatted"])
-         print("Categories:", item["categories"])
-         print("-"*20)
 
-def validLatAndLon(input_text):
-    pattern = re.compile(r"^[-]?\d{1,2}(?:\.\d+)?$", re.IGNORECASE)
+def printInfos(organized_sorted_by_distance):
+    for item in organized_sorted_by_distance:
+        print("\n")
+        print("-" * 20)
+        print("Name:", item["name"])
+        print("Country:", item["country"])
+        print("City:", item["city"])
+        print("Latitude and Longitude:", item["lat_long"])
+        print("District:", item["district"])
+        print("Distance:", "{:.2f}".format(item["distance"]), "Km")
+        print("Adress:", item["formatted"])
+        print("Categories:", item["categories"])
+        print("-" * 20)
+
+
+def validLat(input_text):
+    pattern = re.compile(
+        r"/^(\-?[0-8]?\d(?:\.\d{1,6})?|\-?90(?:\.0{1,6})?)$/", re.IGNORECASE
+    )
+    return bool(pattern.match(input_text))
+
+
+def validLon(input_text):
+    pattern = re.compile(
+        r"/^(\-?\d{1,2}(?:\.\d{1,6})?|\-?180(?:\.0{1,6})?)$/", re.IGNORECASE
+    )
     return bool(pattern.match(input_text))
 
 
@@ -224,6 +246,7 @@ def requestTimeZone(lat, long):
     response = requests.get(url)
     d = response.json()
     return [d["timeZone"], d["time"], d["dateTime"]]
+
 
 def requestCurrency(capital):
     url = f"https://restcountries.com/v3.1/capital/{capital}"
@@ -236,6 +259,7 @@ def requestCurrency(capital):
     finally:
         return currency
 
+
 def main():
     database = fileToDict("categories.txt")
 
@@ -245,14 +269,14 @@ def main():
     # Requesting the information input's.
     while True:
         local_coords_lat = input("Insert your latitude > ")
-        if validLatAndLon(local_coords_lat):
+        if validLat(local_coords_lat):
             break
         else:
             print("Insert an valid latitude.")
 
     while True:
         local_coords_lon = input("Insert your longitude > ")
-        if validLatAndLon(local_coords_lon):
+        if validLon(local_coords_lon):
             break
         else:
             print("Insert an valid longitude.")
@@ -268,11 +292,9 @@ def main():
                 break
         finally:
             print("Insert an valid number")
-            
+
     # local_coords_lat = '38.9'
     # local_coords_lon = '77.03'
-            
-            
 
     if menu_op == 1:
         selected = getCategories(database)
@@ -284,9 +306,8 @@ def main():
         organized_response_dict = catchJsonInfos(
             response.json(), local_coords_lat, local_coords_lon
         )
-        
-        printInfos(organized_response_dict)
 
+        printInfos(organized_response_dict)
 
     elif menu_op == 2:
         clear_terminal()
@@ -299,7 +320,9 @@ def main():
         print(
             f"Your local time > {actual_datetime.strftime('%H:%M:%S')} | {datetime_obj_destiny.strftime('%H:%M:%S')} < Your destiny time\n"
         )
-        difference = abs(round((datetime.now() - datetime_obj_destiny).total_seconds() / 3600))
+        difference = abs(
+            round((datetime.now() - datetime_obj_destiny).total_seconds() / 3600)
+        )
         print(f"This is a difference of {difference} hours.")
         print(f"The destiny TimeZone is {destiny_info[0]}.")
 
@@ -307,9 +330,7 @@ def main():
         capital = destiny_info[0].split("/")[1]
         currency_info = requestCurrency(capital)
         if currency_info is not None:
-    
             print(f"Your destiny currency is {currency_info}.")
-
         # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
 
         # url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
@@ -322,12 +343,11 @@ def main():
     else:
         exit()
 
-    #local_coords_lat = "40.730610"
-    #local_coords_lon = "-73.935242"
-    #how_far_meters = 20 * 1000
+    # local_coords_lat = "40.730610"
+    # local_coords_lon = "-73.935242"
+    # how_far_meters = 20 * 1000
 
 
 if __name__ == "__main__":
     clear_terminal()
     main()
-

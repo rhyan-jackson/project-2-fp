@@ -4,12 +4,12 @@ import os
 from math import radians, cos, sin, acos
 import re
 from datetime import datetime
+from time import sleep
 
 
 def menu():
-
     print(
-        """
+        """\033[32m
     ███        ▄████████    ▄████████  ▄█    █▄     ▄████████  ▄█               ▄███████▄  ▄█          ▄████████ ███▄▄▄▄   ███▄▄▄▄      ▄████████    ▄████████ 
 ▀█████████▄   ███    ███   ███    ███ ███    ███   ███    ███ ███              ███    ███ ███         ███    ███ ███▀▀▀██▄ ███▀▀▀██▄   ███    ███   ███    ███ 
    ▀███▀▀██   ███    ███   ███    ███ ███    ███   ███    █▀  ███              ███    ███ ███         ███    ███ ███   ███ ███   ███   ███    █▀    ███    ███ 
@@ -19,14 +19,15 @@ def menu():
     ███       ███    ███   ███    ███ ███    ███   ███    ███ ███▌    ▄        ███        ███▌    ▄   ███    ███ ███   ███ ███   ███   ███    ███   ███    ███ 
    ▄████▀     ███    ███   ███    █▀   ▀██████▀    ██████████ █████▄▄██       ▄████▀      █████▄▄██   ███    █▀   ▀█   █▀   ▀█   █▀    ██████████   ███    ███ 
               ███    ███                                      ▀                           ▀                                                         ███    ███ 
-        """
+        \033[m"""
     )
+    print("Please run this code in maximized window".center(160))
     input("Press ENTER to continue".center(160))
     print(
         """
            Choose an option
- ( 1 ) Request locals based in given coord's and area.
- ( 2 ) Start travelling plan
+ \033[32m( 1 )\033[m Request locals based in given coord's and area.
+ \033[32m( 2 )\033[m Start travelling plan
         
         """
     )
@@ -35,10 +36,10 @@ def menu():
         try:
             op = int(input("\nInsert your option > "))
         except Exception:
-            print("Insert an valid option.")
+            print("\033[31mInsert an valid option.\033[m")
         else:
-            if not 1 <= op or not op <= 2:
-                print("Insert an valid option.")
+            if op not in (1, 2):
+                print("\033[31mInsert an valid option.\033[m")
             else:
                 clear_terminal()
                 return op
@@ -76,28 +77,34 @@ def getCategories(categories_database):
             while True:
                 clear_terminal()
                 print()
-                print(
-                    "Choose the category that you want | example: category(n° of sub.)\n"
-                )
+                print("Choose the category that you want.\n")
                 print(f"Category directory > {category_string}\n")
-                print("( ID ) | Category")
-                print("―――――――――――――――――――")
+                print(
+                    "\033[32m( ID )\033[m | Category\033[33m(n° of subcategories)\033[m"
+                )
+                print("―" * 40)
                 for pos, category in enumerate(current.keys()):
                     quantity_sub = len(current[category].keys())
-                    print(f"( {str(pos).zfill(2)} ) | {category}({quantity_sub})")
+                    print(
+                        f"\033[32m( {str(pos).zfill(2)} )\033[m | {category}\033[33m({quantity_sub})\033[m",
+                        flush=True,
+                    )
+                    sleep(0.015)
                 print()
                 try:
                     next_category_input = input(
-                        "Insert the next category ID that you want (Enter to actual) > "
+                        "Insert the next category ID that you want \033[32m(Enter to actual)\033[m > "
                     )
                     next_category_id = int(next_category_input)
                 except Exception:
                     if next_category_input.strip() == "":
                         break
-                    print("Insert an valid ID. (Error)")
+                    print("\033[31mInsert an valid ID.\033[m")
+                    sleep(1.5)
                 else:
-                    if not 0 <= next_category_id <= len(current.keys()) - 1:
-                        print("Insert an valid ID.")
+                    if next_category_id not in range(0, len(current.keys()) - 1):
+                        print("\033[31mInsert an valid ID.\033[m")
+                        sleep(1.5)
                     else:
                         break
 
@@ -128,8 +135,8 @@ def getCategories(categories_database):
         print(
             """
            Do you want to continue selecting?
- ( 1 ) Yes
- (Enter) No
+ \033[32m( 1 )\033[m Yes
+ \033[31m(Enter)\033[m No
                 
                 """
         )
@@ -204,18 +211,21 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
 
 
 def printInfos(organized_sorted_by_distance):
+    if len(organized_sorted_by_distance) == 0:
+        print("\033[31mThere isn't any place for this categories on this area.\033[m")
+        return None
     for item in organized_sorted_by_distance:
-        print("\n")
-        print("-" * 50)
-        print("Name:", item["name"])
-        print("Country:", item["country"])
-        print("City:", item["city"])
-        print("Latitude and Longitude:", item["lat_long"])
-        print("District:", item["district"])
-        print("Distance:", "{:.2f}".format(item["distance"]), "Km")
-        print("Adress:", item["formatted"])
-        print("Categories:", item["categories"])
-        print("-" * 50)
+        print("\n", flush=True)
+        print(f"{' '*5}\033[33m{item['name']}\033[m")
+        print("\033[32mCountry:\033[m", item["country"])
+        print("\033[32mCity:\033[m", item["city"])
+        print("\033[32mLatitude and Longitude:\033[m", item["lat_long"])
+        print("\033[32mDistrict:\033[m", item["district"])
+        print("\033[32mDistance:\033[m", "{:.2f}".format(item["distance"]), "Km")
+        print("\033[32mAdress:\033[m", item["formatted"])
+        print("\033[32mCategories:\033[m", item["categories"])
+        sleep(1)
+
 
 def validLat(input_text):
     pattern = re.compile(r"^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$", re.IGNORECASE)
@@ -227,6 +237,7 @@ def validLon(input_text):
         r"^-?((\d{1,2}(\.\d+)?)|1[0-7]\d(\.\d+)?|180(\.0+)?)$", re.IGNORECASE
     )
     return bool(pattern.match(input_text))
+
 
 def requestTimeZone(lat, long):
     url = f"https://timeapi.io/api/Time/current/coordinate?latitude={lat}&longitude={long}"
@@ -247,7 +258,21 @@ def requestCurrency(capital):
         return currency
 
 
+def testInternet():
+    url_teste = "http://www.google.com"
+
+    try:
+        resposta = requests.get(url_teste)
+        resposta.raise_for_status()
+        return True
+    except requests.RequestException:
+        return False
+
+
 def main():
+    
+    assert testInternet()
+    
     database = fileToDict("categories.txt")
 
     # Selected categories after user choose.
@@ -259,14 +284,14 @@ def main():
         if validLat(local_coords_lat):
             break
         else:
-            print("Insert an valid latitude.")
+            print("\033[31mInsert an valid latitude.\033[m")
 
     while True:
         local_coords_lon = input("Insert your longitude > ")
         if validLon(local_coords_lon):
             break
         else:
-            print("Insert an valid longitude.")
+            print("\033[31mInsert an valid longitude.\033[m")
 
     while True:
         how_far_meters_inp = input("Insert how far you want to go (km) > ")
@@ -279,9 +304,6 @@ def main():
                 break
         finally:
             print("Insert an valid number")
-
-    # local_coords_lat = '38.9'
-    # local_coords_lon = '77.03'
 
     if menu_op == 1:
         selected = getCategories(database)
@@ -298,7 +320,9 @@ def main():
 
     elif menu_op == 2:
         clear_terminal()
-        print("You've choosen the travel plan. Here are the specific info's: ")
+        print(
+            "You've chosen the \033[32mtravel plan\033[m. Here are the specific info's:\n"
+        )
         destiny_info = requestTimeZone(local_coords_lat, local_coords_lon)
         datetime_obj_destiny = datetime.strptime(
             destiny_info[2][:18], "%Y-%m-%dT%H:%M:%S"
@@ -310,29 +334,46 @@ def main():
         difference = abs(
             round((datetime.now() - datetime_obj_destiny).total_seconds() / 3600)
         )
-        print(f"This is a difference of {difference} hours.")
-        print(f"The destiny TimeZone is {destiny_info[0]}.")
+        print(f"This is a difference of \033[32m{difference}\033[m hours.\n")
+        print(f"The destiny TimeZone is \033[32m{destiny_info[0]}\033[m.\n")
 
         # Requesting the country for currency conversion
         capital = destiny_info[0].split("/")[1]
         currency_info = requestCurrency(capital)
         if currency_info is not None:
-            print(f"Your destiny currency is {currency_info}.")
-        # Aqui a URL vai ser pré-definida pra TOURIST PORPOUSES.
+            print(f"Your destiny currency is \033[32m{currency_info}.\033[m\n")
 
-        # url = f"https://api.geoapify.com/v2/places?categories={','.join(selected)}&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=20&apiKey={api_key}"
+        print(
+            """\n
+           Do you want to see the tourism places in the area?
+ \033[32m( 1 )\033[m Yes
+ \033[31m( 2 )\033[m No
+        
+        """
+        )
 
-        # response = requests.get(url)
-        # organized_response_dict = catchJsonInfos(
-        # response.json(), local_coords_lat, local_coords_lon
-    # )
+        while True:
+            try:
+                op = int(input("\nInsert your option > "))
+            except Exception:
+                print("\033[31mInsert an valid option.\033[m")
+            else:
+                if op not in (1, 2):
+                    print("\033[31mInsert an valid option.\033[m")
+                else:
+                    clear_terminal()
+                    break
 
+        url = f"https://api.geoapify.com/v2/places?categories=tourism,beach,entertainment&filter=circle:{local_coords_lon},{local_coords_lat},{how_far_meters}&bias=proximity:{local_coords_lon},{local_coords_lat}&limit=30&apiKey={api_key}"
+
+        response = requests.get(url)
+        organized_response_dict = catchJsonInfos(
+            response.json(), local_coords_lat, local_coords_lon
+        )
+
+        printInfos(organized_response_dict)
     else:
         exit()
-
-    # local_coords_lat = "40.730610"
-    # local_coords_lon = "-73.935242"
-    # how_far_meters = 20 * 1000
 
 
 if __name__ == "__main__":

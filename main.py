@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 from time import sleep
 
-
+#Function to print the menu
 def menu():
     print(
         """\033[32m
@@ -44,14 +44,15 @@ def menu():
                 clear_terminal()
                 return op
 
-
+#Funciton to clean the terminal
 def clear_terminal():
     if os.name == "nt":
         os.system("cls")
     else:
         os.system("clear")
 
-
+#Function to open the specified file and read its contents line by line and Split each line by "." to create a list of categories, and iterate through the list of categories
+#The final result is a dictionary of categories
 def fileToDict(filename):
     with open(filename, "r") as file:
         categories_all = [line.strip().split(".") for line in file.readlines()]
@@ -66,7 +67,7 @@ def fileToDict(filename):
                 current = current[division]
         return database
 
-
+#Function that will permit the user to choose the categories and subcategories of his interest, and permit to choose more than one category or subcategory
 def getCategories(categories_database):
     categories_selected = []
     while True:
@@ -152,7 +153,7 @@ def getCategories(categories_database):
         clear_terminal()
     return categories_selected
 
-
+#Function to calculate the distance between the coordinates given by the user and the coordinates of the place choosen
 def distanceByCoords(lat1, lat2, lng1, lng2):
     lat1Rad, lat2Rad, lng1Rad, lng2Rad = (
         radians(lat1),
@@ -170,7 +171,7 @@ def distanceByCoords(lat1, lat2, lng1, lng2):
         * rTerra
     )
 
-
+#Function to extract the information from the json file, and organize it in a list, and organizes the list of dictionaries in order of distance, from smallest to largest
 def catchJsonInfos(dict_from_json, lat_client, lon_client):
     data = dict_from_json
 
@@ -209,7 +210,7 @@ def catchJsonInfos(dict_from_json, lat_client, lon_client):
 
     return organized_sorted_by_distance
 
-
+#Function to print the information extracted from the json file
 def printInfos(organized_sorted_by_distance):
     if len(organized_sorted_by_distance) == 0:
         print("\033[31mThere isn't any place for this categories on this area.\033[m")
@@ -223,29 +224,29 @@ def printInfos(organized_sorted_by_distance):
         print("\033[32mDistrict:\033[m", item["district"])
         print("\033[32mDistance:\033[m", "{:.2f}".format(item["distance"]), "Km")
         print("\033[32mAdress:\033[m", item["formatted"])
-        print("\033[32mCategories:\033[m", item["categories"])
+        print("\033[32mCategories:\033[m", ', '.join(item["categories"]))
         sleep(1)
 
-
+#Functions to validate the input latitude
 def validLat(input_text):
     pattern = re.compile(r"^-?([1-8]?\d(\.\d+)?|90(\.0+)?)$", re.IGNORECASE)
     return bool(pattern.match(input_text))
 
-
+#Functions to validate the input longitude
 def validLon(input_text):
     pattern = re.compile(
         r"^-?((\d{1,2}(\.\d+)?)|1[0-7]\d(\.\d+)?|180(\.0+)?)$", re.IGNORECASE
     )
     return bool(pattern.match(input_text))
 
-
+#Functions to request the time zone, time and date, by an api url
 def requestTimeZone(lat, long):
     url = f"https://timeapi.io/api/Time/current/coordinate?latitude={lat}&longitude={long}"
     response = requests.get(url)
     d = response.json()
     return [d["timeZone"], d["time"], d["dateTime"]]
 
-
+#Functions to request the currency of the capital of the destination by an api url
 def requestCurrency(capital):
     url = f"https://restcountries.com/v3.1/capital/{capital}"
     response = requests.get(url)
@@ -257,7 +258,7 @@ def requestCurrency(capital):
     finally:
         return currency
 
-
+#Function to test the internet
 def testInternet():
     url_teste = "http://www.google.com"
 
@@ -268,6 +269,31 @@ def testInternet():
     except requests.RequestException:
         return False
 
+#The function main is the principal function of the program, that:
+    
+        #Uses testInternet() to assert that there is an internet connection.
+        #Reading Categories from File:
+        #Calls fileToDict("categories.txt") to read categories from a file and organize them into a nested dictionary (database).
+        #User Input invokes menu() to get a user's choice.
+        #Collects user input for latitude, longitude, and the distance to search for places.
+
+    #Category Selection and API Request (Option 1):
+        #If the user chooses option 1, it selects categories using getCategories(database).
+        #Constructs an API request URL based on the selected categories, location, and distance.
+        #Makes a request to the Geoapify API using the constructed URL.
+        #Processes the API response using functions like catchJsonInfos and prints the information using printInfos.
+
+    #Travel Plan (Option 2):
+        #Calls requestTimeZone to get time zone information for the destination.
+        #Calculates and displays the time difference between the user's local time and the destination time.
+        #Requests the country for currency conversion using requestCurrency.
+        #Displays information about the destination currency.
+        #Asks the user if they want to see tourism places in the area.
+        #Constructs and sends a request to the Geoapify API to get tourism-related places.
+        #Processes the API response and prints the information.
+
+    #Exiting (Option 3):
+        #When the program finishes, the program exits.
 
 def main():
     
@@ -379,3 +405,5 @@ def main():
 if __name__ == "__main__":
     clear_terminal()
     main()
+    print('\n\n')
+    print('\033[32mThank you for using our script.\033[m'.center(160))

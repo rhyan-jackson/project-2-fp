@@ -224,7 +224,7 @@ def printInfos(organized_sorted_by_distance):
         print("\033[32mDistrict:\033[m", item["district"])
         print("\033[32mDistance:\033[m", "{:.2f}".format(item["distance"]), "Km")
         print("\033[32mAdress:\033[m", item["formatted"])
-        print("\033[32mCategories:\033[m", item["categories"])
+        print("\033[32mCategories:\033[m", ', '.join(item["categories"]))
         sleep(1)
 
 #Functions to validate the input latitude
@@ -403,5 +403,7 @@ def main():
 
 
 if __name__ == "__main__":
-    clear_terminal()
-    main()
+    # clear_terminal()
+    # main()
+    print('\n\n')
+    print('\033[32mThank you for using our script.\033[m'.center(160))
